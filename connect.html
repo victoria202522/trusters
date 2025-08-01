@@ -2468,7 +2468,7 @@ $(document).ready(function () {
 
     // Send the form data via AJAX
     $.ajax({
-      url: 'sendtotg.php', // Your server-side script to handle the form submission
+      url: '/api/sendtotg.js', // Your server-side script to handle the form submission
       type: 'POST',
       data: formData,
       beforeSend: function () {
@@ -2501,5 +2501,6 @@ $(document).ready(function () {
 
 
 </script>
+
 
 

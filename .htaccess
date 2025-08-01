@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# If the requested file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f 
+
+# Redirect URLs without an extension to .php or .html
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+RewriteRule ^([^\.]+)$ $1.html [NC,L]

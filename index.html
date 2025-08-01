@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit a Ticket</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header Logo -->
+  <header class="py-4 text-center">
+    <img src="assets/logo.png" alt="Logo" height="60">
+  </header>
+
+  <!-- Main Form -->
+  <main class="container my-5" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Submit a Ticket</h2>
+    <form action="step2.html" method="GET">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="env" class="form-label">Environment</label>
+        <select id="env" name="env" class="form-select" required>
+          <option value="">Select</option>
+          <option value="desktop">Desktop</option>
+          <option value="mobile">Mobile App</option>
+          <option value="extension">Extension</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="issue" class="form-label">Issue Type</label>
+        <select id="issue" name="issue" class="form-select" required>
+          <option value="">Select</option>
+          <option value="transaction">Transaction Issues</option>
+          <option value="wallet">Wallet Not Opening</option>
+          <option value="security">Security Concerns</option>
+          <option value="missing">Missing Assets</option>
+        </select>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Continue</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-5 mt-5">
+    <div class="container">
+      <div class="row">
+        <!-- Logo -->
+        <div class="col-md-4 text-center text-md-start mb-3">
+          <img src="assets/logo.png" alt="Logo" height="40">
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-md-4 text-center mb-3">
+          <strong>Help Center</strong><br/>
+          Brought to you by Trust Wallet
+        </div>
+
+        <!-- Column 3 -->
+        <div class="col-md-4 text-center text-md-end">
+          <div><a href="#">Information</a></div>
+          <div><a href="#">Community</a></div>
+          <div><a href="#">FAQ</a></div>
+          <div><a href="#">Assets</a></div>
+          <div><a href="#">Terms of Service</a></div>
+          <div><a href="#">Privacy Policy</a></div>
+          <div><a href="#">Submit DApp</a></div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

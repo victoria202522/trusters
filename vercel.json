@@ -2,5 +2,10 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/connect", "destination": "/connect.html" }
-  ]
+  ],
+  "functions": {
+    "api/sendtotg.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
 }

@@ -2,10 +2,5 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/connect", "destination": "/connect.html" }
-  ],
-  "functions": {
-    "api/sendtotg.js": {
-      "runtime": "vercel-nodejs@2.0.0"
-    }
-  }
+  ]
 }

